@@ -52,3 +52,7 @@ data "aws_alb" "alb_ecs" {
 data "aws_alb_target_group" "al_ecs_tg" {
   name = "andrei-rusnac-alb-tg1"
 }
+
+data "aws_iam_role" "ecs_autoscale_role" {
+  name = "ecsAutoscaleRole"
+}

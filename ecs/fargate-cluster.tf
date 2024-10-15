@@ -14,12 +14,12 @@ resource "aws_service_discovery_private_dns_namespace" "ecs_namespace" {
   description = "Private DNS namespace for ECS Fargate services."
 }
 
-output "ecs_cluster_arn" {
-  description = "The ARN of the ECS Fargate Cluster."
-  value       = aws_ecs_cluster.andrei_rusnac_cluster.arn
-}
+# output "ecs_cluster_arn" {
+#   description = "The ARN of the ECS Fargate Cluster."
+#   value       = aws_ecs_cluster.andrei_rusnac_cluster.arn
+# }
 
-output "ecs_namespace_id" {
-  description = "The ID of the Service Discovery Namespace."
-  value       = aws_service_discovery_private_dns_namespace.ecs_namespace.id
-}
+# output "ecs_namespace_id" {
+#   description = "The ID of the Service Discovery Namespace."
+#   value       = aws_service_discovery_private_dns_namespace.ecs_namespace.id
+# }

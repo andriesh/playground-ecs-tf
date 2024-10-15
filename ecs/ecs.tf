@@ -1,7 +1,7 @@
 resource "aws_security_group" "security_group" {
  name   = "andrei-rusnac-ecs-sg1"
  vpc_id = data.aws_vpc.ecs-vpc.id
-    tags = merge(module.common_tags.tags, { Name = "andrei-rusnac-ecs-sg1" })
+ tags = merge(module.common_tags.tags, { Name = "andrei-rusnac-ecs-sg1" })
  ingress {
    from_port   = 80
    to_port     = 80
@@ -26,6 +26,7 @@ resource "aws_ecs_task_definition" "app_task" {
   cpu                       = "512"
   memory                    = "2048"
   execution_role_arn = data.aws_iam_role.ecs_task_execution_role.arn
+  tags = merge(module.common_tags.tags, { Name = "andrei-rusnac-ecs-fargate" })
 
   container_definitions = jsonencode([{
     name      = "randomQuotes"
