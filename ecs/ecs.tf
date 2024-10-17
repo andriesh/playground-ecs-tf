@@ -26,10 +26,14 @@ resource "aws_ecs_task_definition" "app_task" {
   cpu                       = "512"
   memory                    = "2048"
   execution_role_arn = data.aws_iam_role.ecs_task_execution_role.arn
+  # task_role_arn = data.aws_iam_role.ecs_task_execution_role.arn
+  # execution_role_arn = data.aws_iam_role.ecs_task_execution_role.arn
+  # execution_role_arn = aws_iam_role.ecs_assume_role.arn
+
   tags = merge(module.common_tags.tags, { Name = "andrei-rusnac-ecs-fargate" })
 
   container_definitions = jsonencode([{
-    name      = "randomQuotes"
+    name      = "randomQuotes-c1"
     image     = data.aws_ecr_image.my_image.image_uri
     cpu       = 512
     memory    = 2048
@@ -38,7 +42,7 @@ resource "aws_ecs_task_definition" "app_task" {
       containerPort = 80
       hostPort      = 80
       protocol      = "tcp"
-    }]
+    }],
     environment = [
       {
         name  = "AppSettings__AppVersion"
@@ -48,8 +52,22 @@ resource "aws_ecs_task_definition" "app_task" {
         name  = "AppSettings__EnvironmentName"
         value = "DEVELOPMENT"
       }
-    ]
-  }])
+    ],
+    logConfiguration = {
+        logDriver = "awslogs",
+        options = {
+          awslogs-group = "/ecs/arusnac-randomquotes",
+          awslogs-region = "us-east-1",
+          awslogs-stream-prefix = "ecs",
+          mode = "non-blocking",
+          max-buffer-size = "25m"
+        }
+      }
+
+  }]
+
+
+  )
 }
 
 # ECS Cluster
@@ -85,7 +103,7 @@ force_new_deployment = true
 
   load_balancer {
     target_group_arn = data.aws_alb_target_group.al_ecs_tg.arn
-    container_name   = "randomQuotes"
+    container_name   = "randomQuotes-c1"
     container_port   = 80
   }
 
